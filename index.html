@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><!--移动端适配-->
+    <title>植物激素功能探索</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <header>
+        <p>植物激素的奥秘</p>
+        <p>探索不同植物激素对植物生长发育的影响</p>
+        
+    </header>
+
+    <main>
+        <div class="nav-container">
+            <div class="nav-buttons">
+                <button class="nav-btn active" onclick="switchSection('info')">基础知识</button>
+                <button class="nav-btn" onclick="switchSection('simulation')">模拟实验</button>
+                <button class="nav-btn" onclick="startQuiz()">知识测试</button>
+                <button class="nav-btn" onclick="switchSection('ai-assistant')">AI助手</button>
+            </div>
+        </div>
+
+        <!-- 基础知识部分 -->
+        <section id="info" class="section active">
+            <div class="video-container hidden">
+                <h2>植物激素知识讲解</h2>
+                <div class="video-wrapper">
+                    <video id="hormone-video" controls>
+                        <source src="videos/plant-hormones.mp4" type="video/mp4">
+                        您的浏览器不支持视频播放，请更新浏览器。
+                    </video>
+                </div>
+            </div>
+
+            <div class="hormone-container">
+                <div class="hormone-card" data-hormone="auxin">
+                    <h2>生长素</h2>
+                    <img src="images/shengzhangsu.jpg" alt="生长素作用：展示根系发育和向光性">
+                    <p>促进细胞伸长和分裂，调控根系发育</p>
+                    <div class="button-group">
+                        <button onclick="showDetails('auxin')">了解更多</button>
+                        <button class="video-btn" onclick="playVideo('auxin', 0)">视频注解</button>
+                        <button class="animation-btn" onclick="showAnimation('auxin')">动画演示</button>
+                    </div>
+                </div>
+
+                <div class="hormone-card" data-hormone="cytokinin">
+                    <h2>细胞分裂素</h2>
+                    <img src="images/xibaofenli.jpg" alt="细胞分裂素作用：展示芽的发育">
+                    <p>促进细胞分裂，调控芽的发育</p>
+                    <div class="button-group">
+                        <button onclick="showDetails('cytokinin')">了解更多</button>
+                        <button class="animation-btn" onclick="showAnimation('cytokinin')">动画演示</button>
+                    </div>
+                </div>
+
+                <div class="hormone-card" data-hormone="gibberellin">
+                    <h2>赤霉素</h2>
+                    <img src="images/tuoluosuan-2.png" alt="赤霉素作用：展示茎秆伸长">
+                    <p>促进茎秆伸长，打破休眠</p>
+                    <div class="button-group">
+                        <button onclick="showDetails('gibberellin')">了解更多</button>
+                        <button class="animation-btn" onclick="showAnimation('gibberellin')">动画演示</button>
+                    </div>
+                </div>
+
+                <div class="hormone-card" data-hormone="abscisic">
+                    <h2>脱落酸</h2>
+                    <img src="images/tuoluosuan-11.jpg" alt="脱落酸作用：展示抗逆性和休眠">
+                    <p>诱导休眠，提高抗逆性，调节气孔开闭</p>
+                    <div class="button-group">
+                        <button onclick="showDetails('abscisic')">了解更多</button>
+                        <button class="animation-btn" onclick="showAnimation('abscisic')">动画演示</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 动画展示区域 -->
+            <div class="animation-container hidden">
+                <div class="animation-header">
+                    <h2>植物生长动画演示</h2>
+                    <span class="animation-close" onclick="closeAnimation()">&times;</span>
+                </div>
+                <div class="animation-wrapper">
+                    <canvas id="animation-canvas" width="400" height="400"></canvas>
+                    <div class="animation-controls">
+                        <div class="control-group">
+                            <label>激素浓度：</label>
+                            <input type="range" id="animation-hormone-level" min="0" max="100" value="50">
+                            <span id="animation-hormone-value">50%</span>
+                        </div>
+                        <button onclick="restartAnimation()" class="primary-btn">重新播放</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 模拟实验部分 -->
+        <section id="simulation" class="section">
+            <div class="experiment-container">
+                <h2>植物激素模拟实验</h2>
+                <div class="control-group">
+                    <label>生长素浓度：</label>
+                    <input type="range" id="auxin-level" min="0" max="100" value="50" oninput="updateAuxinValue(this.value)">
+                    <span id="auxin-value">50%</span>
+                </div>
+                <div class="control-group">
+                    <label>赤霉素浓度：</label>
+                    <input type="range" id="gibberellin-level" min="0" max="100" value="50" oninput="updateGibberellinValue(this.value)">
+                    <span id="gibberellin-value">50%</span>
+                </div>
+                <div class="control-group">
+                    <label>环境条件：</label>
+                    <select id="environment">
+                        <option value="normal">正常光照</option>
+                        <option value="dark">黑暗环境</option>
+                        <option value="water">水培环境</option>
+                    </select>
+                </div>
+                <button onclick="startSimulation()" class="primary-btn">开始模拟</button>
+            </div>
+            <div class="simulation-display">
+                <canvas id="plant-canvas" width="400" height="400"></canvas>
+                <div class="simulation-stats">
+                    <p>植物高度：<span id="plant-height">0</span> cm</p>
+                    <p>根系长度：<span id="root-length">0</span> cm</p>
+                    <p>生长天数：<span id="growth-days">0</span> 天</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 知识测试弹窗 -->
+        <div id="quiz-modal" class="modal">
+            <div class="modal-content quiz-modal-content">
+                <span class="close" onclick="closeQuiz()">&times;</span>
+                <div class="quiz-container">
+                    <h2>植物激素知识测试</h2>
+                    <div id="quiz-content">
+                        <div class="quiz-question">
+                            <p id="question-text"></p>
+                            <div id="options-container"></div>
+                        </div>
+                        <div class="quiz-controls">
+                            <button onclick="checkAnswer()" class="primary-btn">提交答案</button>
+                            <button onclick="nextQuestion()" class="secondary-btn">下一题</button>
+                        </div>
+                    </div>
+                    <div class="quiz-stats">
+                        <p>得分：<span id="score">0</span></p>
+                        <p>进度：<span id="progress">0/10</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI助手部分 -->
+        <div id="ai-assistant" class="section">
+            <div class="chat-container">
+                <div class="chat-header">
+                    <h2>植物激素AI助手</h2>
+                    <p>有任何关于植物激素的问题，都可以问我哦！</p>
+                </div>
+                <div class="chat-messages" id="chat-messages">
+                    <div class="message bot">
+                        <div class="avatar">🤖</div>
+                        <div class="content">
+                            你好！我是植物激素AI助手。我可以回答你关于以下方面的问题：
+                            <ul>
+                                <li>生长素的作用和应用</li>
+                                <li>细胞分裂素的功能</li>
+                                <li>赤霉素的特点</li>
+                                <li>脱落酸的生理效应</li>
+                                <li>植物激素的实验现象</li>
+                            </ul>
+                            请问你想了解什么呢？
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <textarea id="user-input" placeholder="请输入你的问题..." rows="2"></textarea>
+                    <button onclick="sendMessage()">发送</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="details-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div id="hormone-details"></div>
+            </div>
+        </div>
+
+        <div id="kpi-display">
+            <p id="interaction-count">交互次数: 0</p>
+            
+        </div>
+
+        <!-- 在 HTML 中添加一个画布元素 -->
+        <canvas id="growth-chart" width="400" height="200"></canvas>
+    </main>
+
+    <footer>
+        <p>© 2025 中国计算机程序设计东北电力大学计算机学院. 版权所有</p>
+        <p>© 2025 如有侵权请联系删除</p>
+
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html> 
